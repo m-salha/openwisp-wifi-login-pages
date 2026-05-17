@@ -1,0 +1,29 @@
+{
+  "_info": "Custom English string overrides for Lullex WiFi Provisioning.",
+  "_usage": [
+    "These strings are NOT automatically applied by the build system.",
+    "They serve as:",
+    "  1. A reference for YAML text fields already set in lullex.yml",
+    "  2. A source for updating i18n/en.po entries for full UI translation",
+    "  3. A migration guide when upstream strings change",
+    "To apply UI-level overrides: update matching msgid/msgstr in i18n/en.po",
+    "then run: yarn setup"
+  ],
+  "strings": {
+    "Sign In":                   "Sign In",
+    "Sign Up":                   "Sign Up",
+    "Change Password":           "Change Password",
+    "Privacy Policy":            "Privacy Policy",
+    "Terms of Service":          "Terms of Service",
+    "Change your password":      "Change your password",
+    "Username":                  "Username",
+    "Password":                  "Password",
+    "Remember me":               "Remember me",
+    "Forgot password?":          "Forgot password?",
+    "Register":                  "Register",
+    "Logout":                    "Logout",
+    "Status":                    "Connection Status",
+    "Contact":                   "Contact Support",
+    "copyright":                 "© 2024 Lullex WiFi Provisioning. All rights reserved."
+  }
+}

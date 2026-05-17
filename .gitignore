@@ -35,6 +35,8 @@ organizations/*
 !organizations/default
 !organizations/default/*
 organizations/default/*.yml
+!organizations/lullex
+!organizations/lullex/**
 client/configs/
 client/organizations.json
 !client/assets/

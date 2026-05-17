@@ -1,0 +1,213 @@
+# ================================================================
+# Lullex WiFi Provisioning — Organization Configuration
+# ================================================================
+#
+# PROVISIONING TOKENS — must be replaced before running yarn setup:
+#
+#   __LULLEX_ORG_UUID__
+#       -> OpenWISP Admin -> Organizations -> <org> -> UUID
+#
+#   __LULLEX_RADIUS_TOKEN__
+#       -> OpenWISP Admin -> RADIUS -> Organization RADIUS Settings -> Token
+#
+# SERVER HOST
+#   LAB:        https://api.lab.example.com   (current value below)
+#   PRODUCTION: inject via env or provisioning script before yarn setup
+#
+# CAPTIVE PORTAL URLs
+#   LAB:        mock endpoints (kept below for local dev)
+#   PRODUCTION: replace action URLs with real NAS captive portal endpoints
+#
+# See organizations/lullex/README.md for full provisioning instructions.
+# ================================================================
+
+name: "Lullex WiFi Provisioning"
+slug: "lullex"
+
+settings:
+  mobile_phone_verification: false
+  subscriptions: false
+
+server:
+  host: "https://api.lab.example.com"   # LAB - replace for production
+  uuid: "__LULLEX_ORG_UUID__"
+  secret_key: "__LULLEX_RADIUS_TOKEN__"
+  timeout: 2
+
+client:
+  auto_login: true
+  favicon: "favicon.svg"
+  css:
+    - "index.css"
+  js:
+    - "index.js"
+  languages:
+    - text: "English"
+      slug: "en"
+    # Arabic is RTL-ready via index.css [dir="rtl"] rules.
+    # To activate: create i18n/ar.po, fill translations/ar.custom.json,
+    # then uncomment the entry below and run yarn setup.
+    # - text: "العربية"
+    #   slug: "ar"
+  default_language: "en"
+
+  components:
+
+    header:
+      logo:
+        url: "lullex-logo.svg"
+        alternate_text: "Lullex WiFi Provisioning"
+      links:
+        - text:
+            en: "Sign In"
+          url: "/{orgSlug}/login"
+          authenticated: false
+        - text:
+            en: "Sign Up"
+          url: "/{orgSlug}/registration"
+          authenticated: false
+        - text:
+            en: "Change Password"
+          url: "/{orgSlug}/change-password"
+          authenticated: true
+          methods_excluded:
+            - saml
+            - social_login
+
+    footer:
+      links:
+        - text:
+            en: "Privacy Policy"
+          url: "/{orgSlug}/login"
+          authenticated: false
+        - text:
+            en: "Terms of Service"
+          url: "/{orgSlug}/login"
+          authenticated: false
+      after_html:
+        en: "© 2024 Lullex WiFi Provisioning. All rights reserved."
+
+    login_form:
+      social_login:
+        links: []
+      input_fields:
+        username:
+          type: "text"
+          pattern: null
+          auto_switch_phone_input: false
+        password:
+          pattern: ".{6,}"
+        remember_me:
+          value: true
+      additional_info_text: true
+      buttons:
+        register: true
+      links:
+        forget_password: true
+
+    registration_form:
+      auto_select_first_plan: false
+      input_fields:
+        phone_number: {}
+        username:
+          pattern: '[a-zA-Z@.+\-_\d]{1,150}'
+        email:
+          pattern: '.+@.+\..+'
+        password:
+          pattern: ".{6,}"
+        password_confirm:
+          pattern: ".{6,}"
+        first_name:
+          setting: "disabled"
+        last_name:
+          setting: "disabled"
+        birth_date:
+          setting: "disabled"
+        location:
+          pattern: '[a-zA-Z@.+\-_\d]{1,150}'
+          setting: "disabled"
+        country:
+          pattern: '[a-zA-Z@.+\-_\d\s]{1,150}'
+        zipcode: {}
+        street: {}
+        city: {}
+        tax_number:
+          pattern: '[a-zA-Z@.+\-_\d]{1,150}'
+      additional_info_text: true
+      links:
+        login: true
+
+    password_reset_form:
+      additional_text: true
+      input_fields:
+        email:
+          pattern: '.+@.+\..+'
+      contact_text: true
+      login_page_link: true
+
+    password_reset_confirm_form:
+      additional_text: true
+      input_fields:
+        password:
+          pattern: ".{6,}"
+        password_confirm:
+          pattern: ".{6,}"
+      contact_text: true
+      login_page_link: true
+
+    contact_page:
+      email: "support@lullex.com"
+      helpdesk: null
+      social_links: []
+
+    status_page:
+      links:
+        - text:
+            en: "Change your password"
+          url: "/{orgSlug}/change-password/"
+      accounting_swap_octets: false
+      radius_usage_enabled: true
+
+    password_change_form:
+      input_fields:
+        password1:
+          pattern: ".{6,}"
+        password2:
+          pattern: ".{6,}"
+
+    404_page:
+      heading: true
+      sub_heading: true
+      message: true
+      homepage_link: true
+
+    # CAPTIVE PORTAL - LAB VALUES (mock endpoints)
+    # PRODUCTION: replace action values with real NAS captive portal URLs
+    captive_portal_login_form:
+      method: post
+      action: "http://localhost:8000/captive-portal-mock/login/"   # LAB only
+      fields:
+        username: auth_user
+        password: auth_pass
+      macaddr_param_name: macaddr
+      additional_fields:
+        - name: zone
+          value: zone_name
+        - name: redirurl
+          value: "http://localhost:8080/lullex/status"             # LAB only
+        - name: accept
+          value: accept
+
+    captive_portal_logout_form:
+      method: post
+      action: "http://localhost:8000/captive-portal-mock/logout/"  # LAB only
+      fields:
+        id: logout_id
+      additional_fields: []
+      logout_by_session: true
+      wait_after: 3000
+
+  privacy_policy:
+    en: "privacy-en.md"
+  terms_and_conditions:
+    en: "terms-en.md"

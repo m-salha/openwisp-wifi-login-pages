@@ -1,0 +1,28 @@
+{
+  "_info": "Arabic translation placeholders for Lullex WiFi Provisioning.",
+  "_status": "PENDING - not yet active.",
+  "_activation_steps": [
+    "1. Fill in the empty string values below.",
+    "2. Create i18n/ar.po based on i18n/en.po structure.",
+    "3. Uncomment the Arabic language entry in lullex.yml.",
+    "4. Run: yarn setup",
+    "Note: RTL CSS rules are already in place in client_assets/index.css"
+  ],
+  "strings": {
+    "Sign In":              "",
+    "Sign Up":              "",
+    "Change Password":      "",
+    "Privacy Policy":       "",
+    "Terms of Service":     "",
+    "Change your password": "",
+    "Username":             "",
+    "Password":             "",
+    "Remember me":          "",
+    "Forgot password?":     "",
+    "Register":             "",
+    "Logout":               "",
+    "Status":               "",
+    "Contact":              "",
+    "copyright":            ""
+  }
+}
