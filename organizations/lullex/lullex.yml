@@ -29,9 +29,9 @@ settings:
   subscriptions: false
 
 server:
-  host: "https://api.lab.example.com"   # LAB - replace for production
-  uuid: "__LULLEX_ORG_UUID__"
-  secret_key: "__LULLEX_RADIUS_TOKEN__"
+  host: "https://controller.wifi.lullex.com"   # LAB - replace for production
+  uuid: "73e9cc7b-dbc0-4811-96cd-2eb905dd4635"
+  secret_key: "hTZbDjMntGPTOPIQCb4CdcKibZa4mHwJ"
   timeout: 2
 
 client:
@@ -183,23 +183,24 @@ client:
 
     # CAPTIVE PORTAL - LAB VALUES (mock endpoints)
     # PRODUCTION: replace action values with real NAS captive portal URLs
+    captive_portal_sync_auth: true
     captive_portal_login_form:
-      method: post
-      action: "http://localhost:8000/captive-portal-mock/login/"   # LAB only
+      method: get
+      action: "http://192.168.182.1:3990/logon"
       fields:
-        username: auth_user
-        password: auth_pass
+        username: username
+        password: password
       macaddr_param_name: macaddr
       additional_fields:
         - name: zone
           value: zone_name
         - name: redirurl
-          value: "http://localhost:8080/lullex/status"             # LAB only
+          value: "https://login.wifi.lullex.com/lullex/status"
         - name: accept
           value: accept
 
     captive_portal_logout_form:
-      method: post
+      method: get
       action: "http://localhost:8000/captive-portal-mock/logout/"  # LAB only
       fields:
         id: logout_id
