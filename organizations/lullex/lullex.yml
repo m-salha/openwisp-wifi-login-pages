@@ -29,9 +29,11 @@ settings:
   subscriptions: false
 
 server:
-  host: "https://controller.wifi.lullex.com"   # LAB - replace for production
-  uuid: "73e9cc7b-dbc0-4811-96cd-2eb905dd4635"
-  secret_key: "hTZbDjMntGPTOPIQCb4CdcKibZa4mHwJ"
+  host: "https://controller.wifi.lullex.com"   # production controller URL
+  # Secrets are injected at deploy time (env/provisioning) before `yarn setup`.
+  # NEVER commit real values here. See organizations/lullex/README.md.
+  uuid: "__LULLEX_ORG_UUID__"
+  secret_key: "__LULLEX_RADIUS_TOKEN__"
   timeout: 2
 
 client:
@@ -181,8 +183,8 @@ client:
       message: true
       homepage_link: true
 
-    # CAPTIVE PORTAL - LAB VALUES (mock endpoints)
-    # PRODUCTION: replace action values with real NAS captive portal URLs
+    # CAPTIVE PORTAL - CoovaChilli UAM gateway (on-NAS, 192.168.182.1:3990)
+    # Login/logout actions target the CoovaChilli UAM port on the NAS.
     captive_portal_sync_auth: true
     captive_portal_login_form:
       method: get
@@ -201,7 +203,7 @@ client:
 
     captive_portal_logout_form:
       method: get
-      action: "http://localhost:8000/captive-portal-mock/logout/"  # LAB only
+      action: "http://192.168.182.1:3990/logoff"
       fields:
         id: logout_id
       additional_fields: []
