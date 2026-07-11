@@ -35,6 +35,10 @@ organizations/*
 !organizations/default
 !organizations/default/*
 organizations/default/*.yml
+# Lullex fork: version-control the lullex org config (secrets are
+# placeholders only — real values stay on the production server).
+!organizations/lullex
+!organizations/lullex/**
 client/configs/
 client/organizations.json
 !client/assets/

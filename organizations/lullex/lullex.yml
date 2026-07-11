@@ -1,0 +1,192 @@
+---
+# Lullex WiFi captive-portal organization config.
+#
+# Purpose: version-control the production org config that previously existed
+# ONLY on the production server (/opt/lullex/openwisp-wifi-login-pages).
+# Secrets are placeholders — real values live on the server / in the
+# controller admin and must NEVER be committed.
+#
+# Values marked TODO(prod) must be confirmed against the deployed config on
+# the Lullex-WiFi server (10.10.10.23) before this file is used for a build.
+name: "Lullex WiFi"
+slug: "lullex"
+
+settings:
+  mobile_phone_verification: false
+  subscriptions: false
+
+# configuration variables for the server app
+server:
+  # openwisp-radius API of the production controller (Lullex-WiFi VM).
+  # TODO(prod): confirm whether production proxies to the public hostname or
+  # to a local address (e.g. https://127.0.0.1 / https://10.10.10.23).
+  host: "https://controller.wifi.lullex.com"
+  # Placeholders — copy the real values from the production config or from
+  # the organization page in the controller admin. Do NOT commit them.
+  uuid: organization_uuid
+  secret_key: organization_secret_key
+  timeout: 5
+
+client:
+  auto_login: true
+
+  favicon: "favicon.png"
+
+  css:
+    - "index.css"
+  js:
+    - "index.js"
+  languages:
+    - text: "english"
+      slug: "en"
+  default_language: "en"
+  components:
+    header:
+      logo:
+        # TODO(brand): replace with the Lullex logo asset.
+        url: "openwisp-logo-black.svg"
+        alternate_text: "Lullex WiFi"
+      links:
+        - text:
+            en: "Sign In"
+          url: "/{orgSlug}/login"
+          authenticated: false
+        - text:
+            en: "Change password"
+          url: "/{orgSlug}/change-password"
+          authenticated: true
+          methods_excluded:
+            - saml
+            - social_login
+
+    footer:
+      links: []
+      after_html:
+        en: "Lullex WiFi"
+
+    registration_form:
+      auto_select_first_plan: false
+      input_fields:
+        phone_number: {}
+        username:
+          pattern: '[a-zA-Z@.+\-_\d]{1,150}'
+        email:
+          pattern: '.+@.+\..+'
+        password:
+          pattern: ".{6,}"
+        password_confirm:
+          pattern: ".{6,}"
+        first_name:
+          setting: "disabled"
+        last_name:
+          setting: "disabled"
+        birth_date:
+          setting: "disabled"
+        location:
+          setting: "disabled"
+        country:
+          setting: "disabled"
+        zipcode:
+          setting: "disabled"
+        street:
+          setting: "disabled"
+        city:
+          setting: "disabled"
+        tax_number:
+          setting: "disabled"
+      additional_info_text: true
+      links:
+        login: true
+
+    password_reset_form:
+      additional_text: true
+      input_fields:
+        email:
+          pattern: '.+@.+\..+'
+      contact_text: true
+      login_page_link: true
+
+    password_reset_confirm_form:
+      additional_text: true
+      input_fields:
+        password:
+          pattern: ".{6,}"
+        password_confirm:
+          pattern: ".{6,}"
+      contact_text: true
+      login_page_link: true
+
+    contact_page:
+      email: "support@lullex.com"
+      helpdesk: ""
+      social_links: []
+
+    status_page:
+      links:
+        - text:
+            en: "Change your password"
+          url: "/{orgSlug}/change-password/"
+      accounting_swap_octets: false
+      radius_usage_enabled: true
+
+    login_form:
+      social_login:
+        links: []
+      input_fields:
+        # TODO(prod): confirm whether hotspot accounts log in with plain
+        # usernames or email addresses and tighten the pattern accordingly.
+        username:
+          type: "text"
+          pattern: '[a-zA-Z@.+\-_\d]{1,150}'
+        password:
+          pattern: ".{6,}"
+        remember_me:
+          value: true
+      additional_info_text: true
+      buttons:
+        register: false
+      links:
+        forget_password: true
+
+    password_change_form:
+      input_fields:
+        password1:
+          pattern: ".{6,}"
+        password2:
+          pattern: ".{6,}"
+
+    404_page:
+      heading: true
+      sub_heading: true
+      message: true
+      homepage_link: true
+
+    captive_portal_sync_auth: false
+
+    # CoovaChilli UAM listener on the router (uamlisten=192.168.182.1,
+    # uamport=3990 — provisioned via the controller adoption response).
+    # TODO(prod): confirm the exact action path and field names against the
+    # deployed production config; the router-side values come from
+    # lullex-captive-defaults in lullex-openwrt-image-builder.
+    captive_portal_login_form:
+      method: post
+      action: http://192.168.182.1:3990/login
+      fields:
+        username: username
+        password: password
+      macaddr_param_name: macaddr
+      additional_fields: []
+
+    captive_portal_logout_form:
+      method: post
+      action: http://192.168.182.1:3990/logout
+      fields:
+        id: logout_id
+      additional_fields: []
+      logout_by_session: true
+      wait_after: 3000
+
+  privacy_policy:
+    en: "privacy-en.md"
+  terms_and_conditions:
+    en: "terms-en.md"
